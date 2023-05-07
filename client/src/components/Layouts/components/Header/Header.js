@@ -92,7 +92,7 @@ function Header() {
                                                     <Button option to="/updateProfile">
                                                         Xem Hồ sơ
                                                     </Button>
-                                                    <Button option to="/">
+                                                    <Button option to="/orderList">
                                                         Xem Lịch sử
                                                     </Button>
                                                     <Button option to="/">

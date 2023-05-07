@@ -27,7 +27,7 @@ function OrderDetail() {
                         </div>
                         <div className={cx('receiver')}>
                             <div className={cx('heading')}>Hàn Quốc</div>
-                            <div className={cx('detail')}>Người gửi: <strong>Lê Quang Trung</strong></div>
+                            <div className={cx('detail')}>Người gửi: <strong>Trần Thị Vinh</strong></div>
                             <div className={cx('detail')}>Số điện thoại: <strong>0123456789</strong></div>
                             <div className={cx('detail')}>Địa chỉ gửi hàng: <strong>10 Jeongjail-ro 213beongil</strong></div>
                         </div>
@@ -85,7 +85,9 @@ function OrderDetail() {
                                                 <input type="text" readOnly value={'32'}></input>
                                             </td>
                                         </tr>
+                                        
                                     </table>
+                                    {/* <Button contact>Xác nhận</Button> */}
                                 </div>
                             </div>
                         </div>

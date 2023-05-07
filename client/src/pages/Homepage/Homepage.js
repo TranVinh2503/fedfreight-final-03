@@ -35,7 +35,7 @@ function Homepage() {
                                         Không giới hạn gửi các mặt hàng, nhận xử lý hiệu quả các mặt hàng khó đi khi quý
                                         khách gửi hàng từ Việt Nam sang Hàn Quốc một cách nhanh chóng.
                                     </div>
-                                    <img src={icons.package} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                                 <div className={cx('slider-box')} style={{ backgroundColor: '#C1EAC0' }}>
                                     <div className={cx('slider-box-heading')}>HỖ TRỢ NHẬN HÀNG TẠI NHÀ</div>
@@ -44,7 +44,7 @@ function Homepage() {
                                         lớn. Hỗ trợ lấy hàng tại các bến xe dành cho các khách hàng ở ngoại thành và
                                         tỉnh lẻ
                                     </div>
-                                    <img src={icons.house} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                                 <div className={cx('slider-box')} style={{ backgroundColor: '#B5D2ED' }}>
                                     <div className={cx('slider-box-heading')}>THỜI GIAN VẬN CHUYỂN NHANH CHÓNG</div>
@@ -52,7 +52,7 @@ function Homepage() {
                                         Với thời gian vận chuyển 7 ngày/tuần, chúng tôi cam kết với khách hàng thời gian
                                         bay và giao hàng đến tận tay nhanh chóng từ 2-4 ngày
                                     </div>
-                                    <img src={icons.clock} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                             </div>
                             <div className={cx('second-slider')}>
@@ -63,7 +63,7 @@ function Homepage() {
                                         vận chuyển sang Hàn Quốc với hệ thống kiểm soát đơn hàng và quy trình giao hàng
                                         nghiêm ngặt
                                     </div>
-                                    <img src={icons.shield} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                                 <div className={cx('slider-box')} style={{ backgroundColor: '#F4BFBF' }}>
                                     <div className={cx('slider-box-heading')}>HỆ THỐNG CHECKING ĐƠN HÀNG</div>
@@ -71,7 +71,7 @@ function Homepage() {
                                         Mọi đơn hàng của khách hàng sẽ được cập nhập trên hệ thống checking của chúng
                                         tôi. Để giúp quý khách hàng theo dõi đơn hàng của mình liên tục 24/24
                                     </div>
-                                    <img src={icons.check} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                                 <div className={cx('slider-box')} style={{ backgroundColor: '#B3BFEB' }}>
                                     <div className={cx('slider-box-heading')}>BẢO HIỂM HÀNG HOÁ TUYỆT ĐỐI</div>
@@ -80,7 +80,7 @@ function Homepage() {
                                         sang Hàn Quốc. Các kiện hàng được đóng gói, bao bọc cận thận với gói Bảo Hiểm
                                         Hàng Hoá
                                     </div>
-                                    <img src={icons.care} alt="" className={cx('slider-box-image')}></img>
+                                    
                                 </div>
                             </div>
                         </div>

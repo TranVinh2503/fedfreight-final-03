@@ -60,6 +60,7 @@ function UpdateProfile() {
         event.preventDefault();
 
         const formData = new FormData();
+        console.log(selectedFile);
         formData.append('avatar', selectedFile);
         formData.append('userName', user?.userName);
         formData.append('userId', user?.id);

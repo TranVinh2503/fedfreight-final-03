@@ -4,16 +4,13 @@ const sqlite3 = require("sqlite3");
 var bodyParser = require("body-parser");
 const uuid = require("uuid");
 const path = require("path");
-const multer = require('multer');
+const multer = require("multer");
 
 const verifyToken = require("./middleware/auth");
 const bcrypt = require("bcrypt");
 const http = require("http");
 let formidable = require("formidable");
 let fs = require("fs");
-
-
-
 
 // const multer = require("multer");
 // app.use(multer().none());
@@ -157,21 +154,18 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/contributorList", (req, res) => {
-  db.all(
-    "SELECT * FROM Contributor ",
-    async (err, user) => {
-      if (err) {
-        return console.error(err.message);
-      }
-      if (!user) {
-        res.send({ getContributor: false });
-      } else {
-        res.json({
-          user,
-        });
-      }
+  db.all("SELECT * FROM Contributor ", async (err, user) => {
+    if (err) {
+      return console.error(err.message);
     }
-  );
+    if (!user) {
+      res.send({ getContributor: false });
+    } else {
+      res.json({
+        user,
+      });
+    }
+  });
 });
 
 app.get("/user/:id", (req, res) => {
@@ -196,7 +190,11 @@ app.get("/user/:id", (req, res) => {
         if (!user) {
           res.send({ getUserName: false });
         } else {
-          res.send({ userName: user.userName,user : user,avatarUrl: user.avatarUrl });
+          res.send({
+            userName: user.userName,
+            user: user,
+            avatarUrl: user.avatarUrl,
+          });
         }
       }
     );
@@ -350,12 +348,14 @@ app.post("/message", (req, res) => {
   });
 });
 
-app.post('/image',(req,res)=>{
-  const { originalname, mimetype, size,conversationId,sender } = req.file;
-  const filePath = req.file.path;  
+app.post("/image", (req, res) => {
+  const { originalname, mimetype, size, conversationId, sender } = req.file;
+  const filePath = req.file.path;
 
-  res.status(200).json({ message: 'File uploaded successfully', file: req.file });
-})
+  res
+    .status(200)
+    .json({ message: "File uploaded successfully", file: req.file });
+});
 
 // get
 app.get("/message/:conversationId", async (req, res) => {
@@ -374,70 +374,101 @@ app.get("/message/:conversationId", async (req, res) => {
 
 // Update Avatar
 // Serve the public folder as a static directory
-app.post('/updateInfo', verifyToken, upload.single('avatar'), (req, res) => {
-  const { userId, role, fullName, phone, birthday } = req.body;
+app.post("/updateInfo", verifyToken, (req, res) => {
+  let form = new formidable.IncomingForm();
 
-  // Kiểm tra xem tệp tin đính kèm 'avatar' có tồn tại hay không
-  if (req.file) {
-    const fileExtension = path.extname(req.file.originalname);
-    const newFilename = userId + fileExtension;
-    const newpath = path.join(__dirname, 'public', 'avatarUser', newFilename);
+  // Parse the form data
+  form.parse(req, function (error, fields, file) {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error processing form data");
+      return;
+    }
 
-    // Di chuyển tệp tin đính kèm từ thư mục tạm sang thư mục public
-    fs.rename(req.file.path, newpath, function (err) {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error saving file');
-        return;
-      }
+    let userId = fields.userId;
+    const fullName = fields.fullName;
+    const phone = fields.phone;
+    const birthday = fields.birthday;
+    let newFilename = null;
+    let url = null;
 
-      const url = `http://${req.hostname}:${PORT}/avatarUser/${newFilename}`;
-
-      // Cập nhật thông tin của người dùng trong cơ sở dữ liệu
+    // Check if a file was uploaded
+    if (Object.keys(file).length !== 0 && file.constructor === Object) {
+      let fileExtension = path.extname(file.avatar.originalFilename);
+      newFilename = userId + fileExtension;
+      let newpath = path.join(__dirname, "public", "avatarUser", newFilename);
+      // Move the uploaded file from the temporary directory to the public folder
+      fs.rename(file.avatar.filepath, newpath, function (err) {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Error saving file");
+          return;
+        }
+        url = `http://${req.hostname}:8000/avatarUser/${newFilename}`;
+        updateUserInfo();
+      });
+    } else {
       db.run(
-        `UPDATE ${role} SET avatarUrl = ?, fullName = ?, phone = ?, birthday = ? WHERE id = ?`,
-        [newFilename, fullName, phone, birthday, userId],
+        `UPDATE ${fields.role} SET fullName = ?, phone = ?, birthday = ? WHERE id = ?`,
+        [ fullName, phone, birthday, fields.userId],
         function (err) {
           if (err) {
-            console.error(err.message);
-            return res.status(500).json('Failed to update user info.');
+            console.log(err);
+            return res.status(500).json("Failed to update user avatar.");
           }
-
-          return res.status(200).json({
-            url: url,
-            fullName: fullName,
-            phone: phone,
-          });
+          let response = { fullName: fullName, phone: phone };
+          if (url) {
+            response.url = url;
+          }
+          return res.status(200).json(response);
         }
       );
-    });
-  } else {
-    // Cập nhật thông tin của người dùng trong cơ sở dữ liệu
-    db.run(
-      `UPDATE ${role} SET fullName = ?, phone = ?, birthday = ? WHERE id = ?`,
-      [fullName, phone, birthday, userId],
-      function (err) {
-        if (err) {
-          console.error(err.message);
-          return res.status(500).json('Failed to update user info.');
-        }
+    }
 
-        return res.status(200).json({
-          fullName: fullName,
-          phone: phone,
-        });
-      }
-    );
-  }
+    function updateUserInfo() {
+      // Update the user info in the database
+      db.run(
+        `UPDATE ${fields.role} SET avatarUrl = ?, fullName = ?, phone = ?, birthday = ? WHERE id = ?`,
+        [newFilename, fullName, phone, birthday, fields.userId],
+        function (err) {
+          if (err) {
+            console.log(err);
+            return res.status(500).json("Failed to update user avatar.");
+          }
+          let response = { fullName: fullName, phone: phone };
+          if (url) {
+            response.url = url;
+          }
+          return res.status(200).json(response);
+        }
+      );
+    }
+  });
 });
 
 
-
-
-// Create Order 
+// Create Order
 app.post("/orderInitial", (req, res) => {
   const customerId = req.body.customerId;
   const contributorId = req.body.contributorId;
+  const time = req.body.time
+  let userName
+
+  try {
+    const sql = `SELECT userName FROM Customer WHERE id = ?`
+    db.all(sql, customerId, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return err
+      } else {
+        userName = rows[0].userName
+        console.log(userName);
+      }
+    })
+  } catch (error) {
+    console.error(`Failed to search for user name by ID: ${error}`);
+    throw error;
+  }
 
   // Check if the data already exists in the database
   db.get(
@@ -457,8 +488,8 @@ app.post("/orderInitial", (req, res) => {
       }
 
       // If data doesn't exist, insert it into the database
-      const sql = `INSERT INTO Orders (customerId, contributorId) VALUES (?, ?)`;
-      const values = [customerId, contributorId];
+      const sql = `INSERT INTO Orders (customerId, contributorId,customerName,time) VALUES (?, ?,?,?)`;
+      const values = [customerId, contributorId,userName,time];
       db.run(sql, values, function (err) {
         if (err) {
           res.status(500).json(err);
@@ -479,8 +510,8 @@ app.post("/orderInitial", (req, res) => {
 app.get("/OrderInitial/:userId", (req, res) => {
   console.log(req.params.userId + " userId");
   const userId = req.params.userId;
-  const sql =
-    "SELECT * FROM Orders WHERE customerId = ? OR contributorId = ?";
+
+  const sql = "SELECT * FROM Orders WHERE customerId = ? OR contributorId = ?";
   const values = [userId, userId];
   db.all(sql, values, (err, rows) => {
     if (err) {
@@ -491,13 +522,22 @@ app.get("/OrderInitial/:userId", (req, res) => {
   });
 });
 
-// Save product information 
-app.post('/saveProductInfo',(req,res)=>{
-  const {senderNameVN,senderNameHQ,phoneVN,phoneHQ,senderAddress,receiverAddress,shipBranch,note,productDetail,orderId} = req.body;
+// Save product information
+app.post("/saveProductInfo", (req, res) => {
+  const {
+    senderNameVN,
+    senderNameHQ,
+    phoneVN,
+    phoneHQ,
+    senderAddress,
+    receiverAddress,
+    shipBranch,
+    note,
+    productDetail,
+    orderId,
+  } = req.body;
   console.log(req.body);
-  const productDetailJson = JSON.stringify(productDetail)
-  
-  
+  const productDetailJson = JSON.stringify(productDetail);
 
   // Check if the data already exists in the database
   db.get(
@@ -518,20 +558,43 @@ app.post('/saveProductInfo',(req,res)=>{
 
       // If data doesn't exist, insert it into the database
       const sql = `INSERT INTO ProductInfo(senderNameVN, receiverNameHQ,phoneVN,phoneHQ,senderAddress,receiverAddress,shipBranch,product,orderId,note) VALUES (?,?,?,?,?,?,?,?,?,?)`;
-      const values = [senderNameVN,senderNameHQ,phoneVN,phoneHQ,senderAddress,receiverAddress,shipBranch,productDetailJson,orderId,note];
+      const values = [
+        senderNameVN,
+        senderNameHQ,
+        phoneVN,
+        phoneHQ,
+        senderAddress,
+        receiverAddress,
+        shipBranch,
+        productDetailJson,
+        orderId,
+        note,
+      ];
       db.run(sql, values, function (err) {
         if (err) {
           console.error(err);
           res.status(500).json(err);
         } else {
-          res.status(200).json('Saved');
+          res.status(200).json("Saved");
         }
       });
     }
   );
+});
 
+app.get('/getOrder',(req,res)=>{
+
+  db.all('SELECT * FROM Orders', (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error fetching orders from database');
+    }
+    // Return the orders as JSON
+    console.log(rows);
+    return res.status(200).json(rows);
+  })
+  
 })
-
 
 
 

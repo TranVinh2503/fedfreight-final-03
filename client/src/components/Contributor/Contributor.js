@@ -15,6 +15,10 @@ const cx = classNames.bind(styles);
 function Contributor({ idContributor, stars, quantity, name, avatarURl }) {
     const { user } = useContext(AppContext);
     const [avatar, setAvatar] = useState();
+    const [clickTime, setClickTime] = useState(null);
+
+
+
     const list = [];
     for (let i = 1; i <= stars; i++) {
         list.push(<img src={icons.star} alt="" className={cx('icon')}></img>);
@@ -37,9 +41,13 @@ function Contributor({ idContributor, stars, quantity, name, avatarURl }) {
         }
     };
     const handleSelectOrder = async ()=>{
+        const time = new Date();
+        setClickTime(time);
+
         const productInitial = {
             customerId: user?.id,
             contributorId: idContributor,
+            time : time
         }
         try {
             const res = await axios.post('http://localhost:8000/orderInitial', productInitial);

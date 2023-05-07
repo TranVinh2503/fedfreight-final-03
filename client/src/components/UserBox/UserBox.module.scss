@@ -9,32 +9,6 @@
     margin-right: 1.6rem;
 }
 
-.feedback {
-    color: var(--text-clr);
-    padding-left: 4rem;
-
-    & .customer-avatar {
-        height: 6rem;
-        width: 6rem;
-    }
-
-    & .customer-name {
-        font-size: 1.8rem;
-        line-height: 2rem;
-        font-size: 600;
-        font-weight: 600;
-        margin-right: 2rem;
-        text-align: left;
-        margin-bottom: 0.8rem;
-    }
-
-    & .customer-text {
-        font-size: 1.4rem;
-        line-height: 1.6rem;
-        text-align: left;
-    }
-}
-
 .chatbox {
     color: var(--white-clr);
     height: max-content;

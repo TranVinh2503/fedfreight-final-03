@@ -5,12 +5,8 @@ import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
-function UserBox({ feedback = false, chatbox = false, search = false, interactiveUser = false, avatarId, idUser, content }) {
+function UserBox({ chatbox = false, search = false, interactiveUser = false, avatarId, idUser, content }) {
     let id = JSON.stringify(avatarId).replaceAll('"', '');
-    // let src = '..' + id + '.jpg';
-    // console.log(src);
-
-    // const avatarSrc = require(src);
     const [name, setName] = useState('');
     const [avatarUrl,setAvatarUrl] = useState()
     useEffect(() => {
@@ -29,9 +25,7 @@ function UserBox({ feedback = false, chatbox = false, search = false, interactiv
         getConversations();
     }, [idUser]);
 
-    // const avatarSrc = require('~/assets/images/mono.jpg');
     const classes = cx('wrapper', {
-        feedback,
         chatbox,
         search,
         interactiveUser,

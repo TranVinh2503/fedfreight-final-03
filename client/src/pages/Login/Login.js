@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,7 @@ const Login = () => {
     const [message, setMessage] = useState('');
     const navigate = useNavigate(); // <--- initialize useHistory
     const regexEmail =
-        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$/;
+        /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
     const formik = useFormik({
         initialValues: {

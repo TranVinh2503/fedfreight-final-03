@@ -15,6 +15,7 @@ function Button({
     search = false,
     mail = false,
     update = false,
+    detail = false,
     children,
     onClick,
     ...passProps
@@ -41,7 +42,8 @@ function Button({
         contact,
         search,
         mail,
-        update
+        update,
+        detail
     });
 
     return (

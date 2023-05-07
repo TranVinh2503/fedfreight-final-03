@@ -18,11 +18,12 @@ function UpdateProfile() {
     const [fullName, setFullName] = useState(user?.fullName);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [phone, setPhone] = useState(user?.phone);
-    const [birthday,setBirthday] = useState(user?.birthday)
+    const [phone, setPhone] = useState(user?.phone || "");
+    const [birthday, setBirthday] = useState(user?.birthday);
     const [role, setRole] = useState();
     console.log(birthday);
-    
+
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         console.log(user);
@@ -39,7 +40,6 @@ function UpdateProfile() {
             }
         };
         handleFunction();
-        
     }, [user?.avatarUrl, user]);
 
     const handleFileSelect = (event) => {
@@ -66,7 +66,7 @@ function UpdateProfile() {
         formData.append('role', user?.userType);
         formData.append('fullName', fullName);
         formData.append('phone', phone?.toString());
-        formData.append('birthday',birthday)
+        formData.append('birthday', birthday);
         try {
             const response = await axios.post('http://localhost:8000/updateInfo', formData, {
                 headers: {
@@ -75,7 +75,7 @@ function UpdateProfile() {
                 },
             });
             setPreviewUrl(response.data.url || selectedFile);
-            alert('Updated')
+            alert('Updated');
         } catch (error) {
             console.error(error);
         }
@@ -85,7 +85,6 @@ function UpdateProfile() {
         setFullName(fullNameTmp);
     };
     useEffect(() => {
-
         if (fullName) {
             const tmp = fullName;
             const nameArray = tmp.split(' ');
@@ -106,7 +105,23 @@ function UpdateProfile() {
             return false;
         }
     };
-    
+
+    const isPhoneNumber = (value) => {
+        const regexVietnamPhone = /^(\+84|0)[1-9]\d{8,9}$/;
+        const regexKoreanPhone = /^(\+82|0)[1-9]\d{8,9}$/;
+        return regexVietnamPhone.test(value) || regexKoreanPhone.test(value);
+    };
+
+    function handleChange(e) {
+        const value = e.target.value;
+        setPhone(value);
+
+        if (isPhoneNumber(value)) {
+            setErrorMessage('');
+        } else {
+            setErrorMessage('Sai định dạng số điện thoại Việt Nam hoặc Hàn Quốc');
+        }
+    }
 
     useEffect(() => {
         if (user?.userType === 'customer') {
@@ -175,17 +190,21 @@ function UpdateProfile() {
                                 <label className={cx('title')}>Số điện thoại</label>
                                 <input
                                     defaultValue={user?.phone}
-                                    type="number"
+                                    type="text"
                                     className={cx('input')}
-                                    onChange={(e) => {
-                                        console.log(e.target.value);
-                                        setPhone(e.target.value);
-                                    }}
+                                    value={phone}
+                                    onChange={handleChange}
                                 ></input>
+                                {errorMessage && <span className={cx('error')}>{errorMessage}</span>}
                             </div>
                             <div>
                                 <label className={cx('title')}>Ngày sinh</label>
-                                <input type="date" className={cx('input')} defaultValue={birthday} onChange={(e)=> setBirthday(e.target.value)} ></input>
+                                <input
+                                    type="date"
+                                    className={cx('input')}
+                                    defaultValue={birthday}
+                                    onChange={(e) => setBirthday(e.target.value)}
+                                ></input>
                             </div>
                             <div>
                                 <label className={cx('title')}>Email</label>

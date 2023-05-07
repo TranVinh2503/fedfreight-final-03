@@ -8,7 +8,7 @@ import UserBox from '~/components/UserBox';
 const cx = classNames.bind(styles);
 
 function Homepage() {
-        // const navigate = useNavigate(); // <--- initialize useHistory
+    // const navigate = useNavigate(); // <--- initialize useHistory
     return (
         <div className={cx('wrapper')}>
             <div className={cx('grid')}>
@@ -171,38 +171,52 @@ function Homepage() {
                     <div className={cx('third-content-column')}>
                         <div className={cx('third-content-heading')}>Trải Nghiệm Của Khách Hàng</div>
                         <div className={cx('third-content-feedback')}>
-                            <UserBox
-                                feedback
-                                avatarId={'mono'}
-                                name={'Nguyễn Việt Hoàng'}
-                                content={
-                                    'Bữa có concert bảo anh Tùng bên Hàn gửi về mấy quả dưa chuột ăn giải khát, mình đang diễn khát khô cổ mà shipper giao lên tận sân khấu!'
-                                }
-                            ></UserBox>
-                            <UserBox
-                                feedback
-                                avatarId={'mono'}
-                                name={'Nguyễn Việt Hoàng'}
-                                content={
-                                    'Bữa có concert bảo anh Tùng bên Hàn gửi về mấy quả dưa chuột ăn giải khát, mình đang diễn khát khô cổ mà shipper giao lên tận sân khấu!'
-                                }
-                            ></UserBox>
-                            <UserBox
-                                feedback
-                                avatarId={'mono'}
-                                name={'Nguyễn Việt Hoàng'}
-                                content={
-                                    'Bữa có concert bảo anh Tùng bên Hàn gửi về mấy quả dưa chuột ăn giải khát, mình đang diễn khát khô cổ mà shipper giao lên tận sân khấu!'
-                                }
-                            ></UserBox>
-                            <UserBox
-                                feedback
-                                avatarId={'mono'}
-                                name={'Nguyễn Việt Hoàng'}
-                                content={
-                                    'Bữa có concert bảo anh Tùng bên Hàn gửi về mấy quả dưa chuột ăn giải khát, mình đang diễn khát khô cổ mà shipper giao lên tận sân khấu!'
-                                }
-                            ></UserBox>
+                            <div className={cx('feedback')}>
+                                <img
+                                    src={images.example1}
+                                    alt=""
+                                    className={cx('customer-avatar')}
+                                ></img>
+                                <div className={cx('customer-details')}>
+                                    <div className={cx('customer-name')}>Trần Mỹ Diệu</div>
+                                    <div className={cx('customer-text')}>Mình đã nhận được hàng chỉ sau 3 ngày, hàng đông lạnh vẫn còn đông đá, không gì có thể chê nổi!</div>
+                                </div>
+                            </div>
+                            <div className={cx('feedback')}>
+                                <img
+                                    src={images.example2}
+                                    alt=""
+                                    className={cx('customer-avatar')}
+                                ></img>
+                                <div className={cx('customer-details')}>
+                                    <div className={cx('customer-name')}>Lê Văn Khiêm</div>
+                                    <div className={cx('customer-text')}>Chị họ mình rán con cá chỉ vàng giòn rụm, hàng chuyển sang Việt Nam có 4 ngày mà vẫn còn giòn, mỗi tội nhiều xương!</div>
+                                </div>
+                            </div>
+    
+                            <div className={cx('feedback')}>
+                                <img
+                                    src={images.example3}
+                                    alt=""
+                                    className={cx('customer-avatar')}
+                                ></img>
+                                <div className={cx('customer-details')}>
+                                    <div className={cx('customer-name')}>Nguyễn Việt Hoàng</div>
+                                    <div className={cx('customer-text')}>Rổ gạch ống mà Trần My gửi tôi vẫn còn nguyên, không nhớ đã trả tiền cho shipper chưa nhưng mà anh rất đẹp trai!</div>
+                                </div>
+                            </div>
+                            <div className={cx('feedback')}>
+                                <img
+                                    src={images.example4}
+                                    alt=""
+                                    className={cx('customer-avatar')}
+                                ></img>
+                                <div className={cx('customer-details')}>
+                                    <div className={cx('customer-name')}>Ngô Cẩm Lan</div>
+                                    <div className={cx('customer-text')}>Bữa có concert bảo anh Tùng bên Hàn gửi về mấy quả dưa chuột ăn giải khát, mình đang diễn khát khô cổ mà shipper giao lên tận sân khấu!</div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <div className={cx('third-content-column')}>

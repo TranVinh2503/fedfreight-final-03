@@ -21,7 +21,7 @@ const Register = () => {
     const [countdown, setCountdown] = useState(3);
 
     const regexEmail =
-        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$/;
+        /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
     const formik = useFormik({
         initialValues: {
@@ -32,7 +32,7 @@ const Register = () => {
         },
         validationSchema: Yup.object({
             username: Yup.string().required('Vui lòng nhập tên người dùng'),
-            email: Yup.string().required('Vui lòng nhập email').matches(regexEmail, 'Vui lòng nhập đúng email'),
+            email: Yup.string().required('Vui lòng nhập email').matches(regexEmail, 'Vui lòng nhập đúng email dạng example@gmail.com'),
             password: Yup.string()
                 .required('Vui lòng nhập mật khẩu')
                 .min(8, 'Mật khẩu chứa ít nhất 8 ký tự')

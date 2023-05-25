@@ -3,11 +3,13 @@ import styles from './OrderList.module.scss';
 import icons from '~/assets/icons/icons';
 import UserBox from '~/components/UserBox';
 import Button from '~/components/Button';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { OrderContext } from '~/Context/OrderContext';
 
 const cx = classNames.bind(styles);
 
 function OrderList() {
+    const {setOrder} = useContext(OrderContext)
 
     const [orders,setOrders] = useState()
 
@@ -20,6 +22,10 @@ function OrderList() {
           })
           .catch(error => console.error(error));
       }, []);
+
+      const handleShowOrderDetails = (e)=>{
+        setOrder(e)
+      }
 
     return (
         <div className={cx('wrapper')}>
@@ -35,9 +41,6 @@ function OrderList() {
                             <th className={cx('column2')}>
                                 <input type='text' placeholder='Theo thời gian'></input>
                             </th>
-                            {/* <th className={cx('column3')}>
-                                <input type='text' placeholder='Theo địa chỉ kho hàng'></input>
-                            </th> */}
                             <th className={cx('column1')}>
                                 <span>
                                     <Button search>Tra cứu</Button>
@@ -49,10 +52,9 @@ function OrderList() {
                          <tr key={index}>
                             <td>{order.customerName}</td>
                             <td>{order.time}</td>
-                            {/* <td>Số 34, Hàng Bún, Hà Nội</td> */}
                             <td>
                                 <span>
-                                    <Button detail option to = '/orderDetail'>Chi tiết</Button>
+                                    <Button detail option to = '/orderDetail' onClick={() =>handleShowOrderDetails(order.id)}>Chi tiết</Button>
                                 </span>
                             </td>
                         </tr> 

@@ -67,8 +67,8 @@ function Contributor({ idContributor, stars, quantity, name, avatarURl }) {
                 <div className={cx('detail')}>
                     <div className={cx('info')}>
                         <div className={cx('rate')}>
-                            <div className={cx('stars')}>{list}</div>
-                            <div className={cx('votes')}>{quantity} đánh giá</div>
+                            {/* <div className={cx('stars')}>{list}</div> */}
+                            {/* <div className={cx('votes')}>{quantity} đánh giá</div> */}
                         </div>
                         <div className={cx('name')}>{name}</div>
                     </div>

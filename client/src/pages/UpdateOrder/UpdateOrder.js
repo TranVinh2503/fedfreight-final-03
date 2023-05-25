@@ -72,7 +72,7 @@ function UpdateOrder() {
         };
         try {
             const res = await axios.post('http://localhost:8000/saveProductInfo', productInfo);
-            console.log(res.data);
+            alert("Cập nhật thành công")
         } catch (err) {
             console.log(err);
         }
@@ -98,7 +98,7 @@ function UpdateOrder() {
 
                     <div className={cx('user')}>
                         <UserBox interactiveUser avatarId="mono" content="Tư Vấn Viên" idUser={contributor}></UserBox>
-                        <Button contact>Liên lạc</Button>
+                        <Button contact option to = '/chat'>Liên lạc</Button>
                     </div>
 
                     <div className={cx('input-field')}>
@@ -159,12 +159,12 @@ function UpdateOrder() {
                             <div className={cx('order-container')}>
                                 <form className={cx('order-info')}>
                                     <table>
-                                        <thead>
+                                        <th>
                                             <tr>
                                                 <th>Nhập tên mặt hàng</th>
                                                 <th>Số lượng</th>
                                             </tr>
-                                        </thead>
+                                        </th>
                                         <tbody>
                                             {rows.map((row, index) => (
                                                 <tr key={index}>
@@ -208,9 +208,10 @@ function UpdateOrder() {
                         </div>
 
                         <div className={cx('submit')}>
-                                <Button search onClick={handleSave}>
-                                    Cập nhật
-                                </Button>
+                            <Button search onClick={handleSave}>
+                                Cập nhật
+                            </Button>
+                            {}
                         </div>
                     </div>
                 </div>

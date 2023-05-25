@@ -207,7 +207,7 @@ app.post("/uploadAvatar", verifyToken, (req, res) => {
   const { filename, mimetype, size } = req.file;
 
   db.run(
-    `INSERT INTO avatars (filename, mimetype, size) VALUES (?, ?, ?)`,
+    `INSERT INTO avatars(filename, mimetype, size) VALUES (?, ?, ?)`,
     [filename, mimetype, size],
     function (err) {
       if (err) {
@@ -254,6 +254,7 @@ io.on("connection", (socket) => {
       senderId,
       text,
     });
+    console.log(text);
   });
 
   //when disconnect
@@ -461,7 +462,7 @@ app.post("/orderInitial", (req, res) => {
         console.log(err);
         return err
       } else {
-        userName = rows[0].userName
+        userName = rows[0]?.userName
         console.log(userName);
       }
     })
@@ -589,11 +590,29 @@ app.get('/getOrder',(req,res)=>{
       console.error(err);
       return res.status(500).send('Error fetching orders from database');
     }
-    // Return the orders as JSON
-    console.log(rows);
     return res.status(200).json(rows);
   })
-  
+})
+
+app.get('/getOrderDetail/:orderId',(req,res)=>{
+  const orderId = req.params.orderId;
+  db.all(
+    "SELECT * FROM ProductInfo WHERE orderId = ?",
+    [orderId],
+    (err, row) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Error checking if data exists in database");
+        return;
+      }
+      if(row) {
+        res.status(200).json(row);
+        return;
+      }
+
+      
+    }
+  );
 })
 
 

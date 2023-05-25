@@ -32,17 +32,17 @@ function Chat() {
             });
         });
     }, []);
-
+    // arrivalMessage &&
+    // currentChat?.senderId === arrivalMessage?.sender &&
+    // setMessages((prev) => [...prev, arrivalMessage]);
     useEffect(() => {
-        arrivalMessage &&
-            currentChat?.senderId === arrivalMessage?.sender &&
+        arrivalMessage  &&
             setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
-
     useEffect(() => {
         socket.current.emit('addUser', user?.id);
         socket.current.on('getUsers', (users) => {
-            console.log(users);
+                //
         });
     }, [user]);
 
@@ -109,7 +109,7 @@ function Chat() {
     };
 
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+        scrollRef.messages?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
     return (
@@ -159,7 +159,7 @@ function Chat() {
                         </div>
                         <div className={cx('chat-send')}>
                             <form>
-                                <input
+                                {/* <input
                                     type="file"
                                     name="file"
                                     id="file"
@@ -168,7 +168,7 @@ function Chat() {
                                 ></input>
                                 <label htmlFor="file">
                                     <img src={icons.picture} alt="" className={cx('icon')}></img>
-                                </label>
+                                </label> */}
 
                                 <div className={cx('message-input')}>
                                     {previewUrl && (

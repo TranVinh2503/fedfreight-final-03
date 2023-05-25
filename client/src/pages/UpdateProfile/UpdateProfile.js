@@ -10,7 +10,6 @@ const cx = classNames.bind(styles);
 function UpdateProfile() {
     const { user } = useContext(AppContext);
     const [userName, setUserName] = useState(user?.user);
-    const [gmail, setGmail] = useState(user?.gmail);
 
     const [selectedFile, setSelectedFile] = useState();
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -18,12 +17,12 @@ function UpdateProfile() {
     const [fullName, setFullName] = useState(user?.fullName);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [phone, setPhone] = useState(user?.phone || "");
+    const [phone, setPhone] = useState(user?.phone || '');
     const [birthday, setBirthday] = useState(user?.birthday);
     const [role, setRole] = useState();
     console.log(birthday);
 
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         console.log(user);
@@ -59,27 +58,38 @@ function UpdateProfile() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const formData = new FormData();
-        console.log(selectedFile);
-        formData.append('avatar', selectedFile);
-        formData.append('userName', user?.userName);
-        formData.append('userId', user?.id);
-        formData.append('role', user?.userType);
-        formData.append('fullName', fullName);
-        formData.append('phone', phone?.toString());
-        formData.append('birthday', birthday);
-        try {
-            const response = await axios.post('http://localhost:8000/updateInfo', formData, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access-token')}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            setPreviewUrl(response.data.url || selectedFile);
-            alert('Updated');
-        } catch (error) {
-            console.error(error);
-        }
+        // if (user?.userName && fullName && phone?.toString() && birthday) {
+            const formData = new FormData();
+            formData.append('avatar', selectedFile);
+            formData.append('userName', user?.userName);
+            formData.append('userId', user?.id);
+            formData.append('role', user?.userType);
+            formData.append('fullName', fullName);
+            formData.append('phone', phone?.toString());
+            formData.append('birthday', birthday);
+            try {
+                const response = await axios.post('http://localhost:8000/updateInfo', formData, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access-token')}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                if(!response.data.url){
+                    const url = `http://localhost:8000/avatarUser/${user?.avatarUrl}`;
+                    const blobResponse = await fetch(url);
+                    const blob = await blobResponse.blob();
+                    setPreviewUrl(URL.createObjectURL(blob));
+                }else{
+                    setPreviewUrl(response.data.url || selectedFile);
+                }
+                
+                alert('Updated');
+            } catch (error) {
+                console.error(error);
+            }
+        // } else {
+        //     alert('Vui lòng nhập đầu đủ thông tin');
+        // }
     };
     const handleFullNameChange = (firstName, lastName) => {
         const fullNameTmp = `${lastName} ${firstName}`;
@@ -114,6 +124,7 @@ function UpdateProfile() {
     };
 
     function handleChange(e) {
+        handleChange2(e)
         const value = e.target.value;
         setPhone(value);
 
@@ -121,6 +132,17 @@ function UpdateProfile() {
             setErrorMessage('');
         } else {
             setErrorMessage('Sai định dạng số điện thoại Việt Nam hoặc Hàn Quốc');
+        }
+    }
+
+    function handleChange2(e) {
+        const value = e.target.value;
+        
+
+        if (value) {
+            setErrorMessage('');
+        } else {
+            setErrorMessage('Vui lòng nhập thông tin');
         }
     }
 
@@ -137,7 +159,8 @@ function UpdateProfile() {
             <div className={cx('grid')}>
                 <div className={cx('content')}>
                     <div className={cx('column1')}>
-                        <div className={cx('name')}>{fullName}</div>
+                        {fullName  === null || firstName  === null || lastName === null ? <div className={cx('name')}>Chưa có họ và tên </div> : <div className={cx('name')}>{fullName}</div> }
+                        
                         <div className={cx('nick-name')}>{userName}</div>
                         {isContributor ? (
                             <div className={cx('role')}>{role}</div>
@@ -172,7 +195,6 @@ function UpdateProfile() {
                                     className={cx('input')}
                                     defaultValue={firstName}
                                     onChange={(e) => {
-                                        console.log(e.target.value);
                                         setFirstName(e.target.value.trim());
                                         handleFullNameChange(e.target.value, lastName);
                                     }}

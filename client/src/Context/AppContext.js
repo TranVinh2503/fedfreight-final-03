@@ -15,7 +15,6 @@ export const AppProvider = ({ children }) => {
     function getUserFromToken(token) {
         try {
             const decodedToken = jwtDecode(token);
-            console.log(decodedToken);
             return decodedToken;
         } catch (error) {
             if (error.name === 'InvalidTokenError') {
@@ -34,7 +33,6 @@ export const AppProvider = ({ children }) => {
     
             try {
                 const response = await axios.get(`http://localhost:8000/user/${id}`)
-                console.log(response.data.user);
                 
                 setUser(response.data.user)
             } catch (error) {
